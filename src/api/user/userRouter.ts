@@ -3,7 +3,14 @@ import express, { type Router } from "express";
 import { z } from "zod";
 
 import { createApiResponse } from "@/api-docs/openAPIResponseBuilders";
-import { GetUserSchema, UserSchema } from "@/api/user/userModel";
+import {
+  CreateUserResponseSchema,
+  DeleteUsersResponseSchema,
+  GetUserRequestSchema,
+  GetUserSchema,
+  UserRequestSchema,
+  UserSchema,
+} from "@/api/user/userModel";
 import { validateRequest } from "@/common/utils/httpHandlers";
 import { userController } from "./userController";
 
@@ -11,6 +18,7 @@ export const userRegistry = new OpenAPIRegistry();
 export const userRouter: Router = express.Router();
 
 userRegistry.register("User", UserSchema);
+userRegistry.register("User Request", UserRequestSchema);
 
 userRegistry.registerPath({
   method: "get",
@@ -29,4 +37,34 @@ userRegistry.registerPath({
   responses: createApiResponse(UserSchema, "Success"),
 });
 
+userRouter.post("/create", userController.createUser);
+
+userRegistry.registerPath({
+  method: "post",
+  path: "/users/create",
+  tags: ["User"],
+  request: {
+    body: {
+      description: "Request to create a user",
+      required: true,
+      content: {
+        "application/json": {
+          schema: GetUserRequestSchema.openapi("CreateUserRequest"),
+        },
+      },
+    },
+  },
+  responses: createApiResponse(CreateUserResponseSchema, "Success"),
+});
+
 userRouter.get("/:id", validateRequest(GetUserSchema), userController.getUser);
+
+userRouter.delete("/", userController.deleteAllusers);
+
+userRegistry.registerPath({
+  method: "delete",
+  path: "/users",
+  tags: ["User"],
+  request: {},
+  responses: createApiResponse(DeleteUsersResponseSchema, "Success"),
+});
