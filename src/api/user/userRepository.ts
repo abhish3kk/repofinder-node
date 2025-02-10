@@ -1,30 +1,26 @@
-import type { User } from "@/api/user/userModel";
-
-export const users: User[] = [
-  {
-    id: 1,
-    name: "Alice",
-    email: "alice@example.com",
-    age: 42,
-    createdAt: new Date(),
-    updatedAt: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // 5 days later
-  },
-  {
-    id: 2,
-    name: "Robert",
-    email: "Robert@example.com",
-    age: 21,
-    createdAt: new Date(),
-    updatedAt: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // 5 days later
-  },
-];
+import type { User, UserRequest } from "@/api/user/userModel";
+import { UserModel } from "@/database/models/User";
 
 export class UserRepository {
   async findAllAsync(): Promise<User[]> {
-    return users;
+    return await UserModel.findAll({
+      attributes: {
+        exclude: ["password"],
+      },
+    });
   }
 
   async findByIdAsync(id: number): Promise<User | null> {
-    return users.find((user) => user.id === id) || null;
+    return UserModel.findByPk(id);
+  }
+
+  async createUser(req: UserRequest): Promise<User> {
+    const user = await UserModel.create(req);
+    return user;
+  }
+
+  async deleteAllUsers(): Promise<string> {
+    await UserModel.truncate();
+    return "Users truncated";
   }
 }

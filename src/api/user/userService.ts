@@ -1,9 +1,11 @@
 import { StatusCodes } from "http-status-codes";
 
-import type { User } from "@/api/user/userModel";
+import type { User, UserRequest } from "@/api/user/userModel";
 import { UserRepository } from "@/api/user/userRepository";
 import { ServiceResponse } from "@/common/models/serviceResponse";
+import { env } from "@/common/utils/envConfig";
 import { logger } from "@/server";
+import * as jwt from "jsonwebtoken";
 
 export class UserService {
   private userRepository: UserRepository;
@@ -41,6 +43,40 @@ export class UserService {
       return ServiceResponse.success<User>("User found", user);
     } catch (ex) {
       const errorMessage = `Error finding user with id ${id}:, ${(ex as Error).message}`;
+      logger.error(errorMessage);
+      return ServiceResponse.failure("An error occurred while finding user.", null, StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async createUser(userRequest: UserRequest): Promise<ServiceResponse<string | null>> {
+    try {
+      const user = await this.userRepository.createUser(userRequest);
+      if (!user) {
+        return ServiceResponse.failure("User not Created", null, StatusCodes.BAD_REQUEST);
+      }
+      const token = jwt.sign(
+        {
+          id: user.id,
+        },
+        env.SECRET_KEY,
+        {
+          expiresIn: "1d",
+        },
+      );
+      return ServiceResponse.success<string>("User Created", token);
+    } catch (ex) {
+      const errorMessage = `Error creating user:, ${(ex as Error).message}`;
+      logger.error(errorMessage);
+      return ServiceResponse.failure("An error occurred while finding user.", null, StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async deleteAll(): Promise<ServiceResponse<string | null>> {
+    try {
+      const resp = await this.userRepository.deleteAllUsers();
+      return ServiceResponse.success<string>("Users deleted", resp);
+    } catch (ex) {
+      const errorMessage = `Error creating user:, ${(ex as Error).message}`;
       logger.error(errorMessage);
       return ServiceResponse.failure("An error occurred while finding user.", null, StatusCodes.INTERNAL_SERVER_ERROR);
     }
