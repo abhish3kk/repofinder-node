@@ -35,8 +35,8 @@ jobs:
       # - name: Build Project
       #   run: npm run build
       
-      - name: Print environement variables
-        run: printenv
+      - name: View .env file (for debugging)
+        run: cat .env
       
       # - name: Start Server
       #   run: npm run start
