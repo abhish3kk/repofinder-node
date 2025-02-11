@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: stage
 
     steps:
       - uses: actions/checkout@v2
