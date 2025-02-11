@@ -1,6 +1,6 @@
+import bcrypt from "bcryptjs";
 import { DataTypes, Model } from "sequelize";
 import database from "..";
-
 class UserModel extends Model {
   declare id: number;
   declare firstname: string;
@@ -9,6 +9,15 @@ class UserModel extends Model {
   declare password: string;
   declare readonly createdAt: Date;
   declare readonly modifiedAt: Date;
+
+  static async hashPassword(password: string): Promise<string> {
+    const salt = await bcrypt.genSalt(10);
+    return bcrypt.hash(password, salt);
+  }
+
+  static async verifyPassword(inputPassword: string, storedPassword: string): Promise<boolean> {
+    return bcrypt.compare(inputPassword, storedPassword);
+  }
 }
 
 UserModel.init(
@@ -40,6 +49,11 @@ UserModel.init(
     sequelize: database,
     tableName: "users",
     timestamps: true,
+    hooks: {
+      beforeCreate: async (user: UserModel) => {
+        user.password = await UserModel.hashPassword(user.password);
+      },
+    },
   },
 );
 

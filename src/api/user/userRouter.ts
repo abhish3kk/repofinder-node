@@ -4,13 +4,14 @@ import { z } from "zod";
 
 import { createApiResponse } from "@/api-docs/openAPIResponseBuilders";
 import {
+  CreateUserRequestSchema,
   CreateUserResponseSchema,
   DeleteUsersResponseSchema,
-  GetUserRequestSchema,
   GetUserSchema,
   UserRequestSchema,
   UserSchema,
 } from "@/api/user/userModel";
+
 import { validateRequest } from "@/common/utils/httpHandlers";
 import { userController } from "./userController";
 
@@ -19,6 +20,7 @@ export const userRouter: Router = express.Router();
 
 userRegistry.register("User", UserSchema);
 userRegistry.register("User Request", UserRequestSchema);
+userRegistry.register("Create User Request", CreateUserRequestSchema);
 
 userRegistry.registerPath({
   method: "get",
@@ -49,7 +51,7 @@ userRegistry.registerPath({
       required: true,
       content: {
         "application/json": {
-          schema: GetUserRequestSchema.openapi("CreateUserRequest"),
+          schema: CreateUserRequestSchema.openapi("CreateUserRequest"),
         },
       },
     },
