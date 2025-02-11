@@ -29,7 +29,7 @@ jobs:
           echo "SECRET_KEY=${{ vars.SECRET_KEY }}" >> .env
 
       - name: View .env file (for debugging)
-        run: cat .env | grep COMMON_RATE_LIMIT_MAX_REQUESTS
+        run: cat .env | grep CORS_ORIGIN
           
       - name: Install Dependencies
         run: npm install
