@@ -4,6 +4,7 @@ import type { User, UserRequest } from "@/api/user/userModel";
 import { UserRepository } from "@/api/user/userRepository";
 import { ServiceResponse } from "@/common/models/serviceResponse";
 import { env } from "@/common/utils/envConfig";
+import { UserModel } from "@/database/models/User";
 import { logger } from "@/server";
 import * as jwt from "jsonwebtoken";
 
@@ -79,6 +80,38 @@ export class UserService {
       const errorMessage = `Error creating user:, ${(ex as Error).message}`;
       logger.error(errorMessage);
       return ServiceResponse.failure("An error occurred while finding user.", null, StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async findUser(username: string, password: string) {
+    try {
+      const user = await UserModel.findOne({
+        where: { username },
+      });
+      if (!user) {
+        return ServiceResponse.failure("Invalid username or password", null, StatusCodes.BAD_REQUEST);
+      }
+      const isMatch = await UserModel.verifyPassword(password, user.password);
+      if (!isMatch) {
+        return ServiceResponse.failure("Invalid username or password", null, StatusCodes.UNAUTHORIZED);
+      }
+
+      const token = jwt.sign(
+        {
+          id: user.id,
+          username: user.username,
+        },
+        env.SECRET_KEY,
+        {
+          expiresIn: "1d",
+        },
+      );
+
+      return ServiceResponse.success<string>("Login successful", token);
+    } catch (ex) {
+      const errorMessage = `Error in Login:, ${(ex as Error).message}`;
+      logger.error(errorMessage);
+      return ServiceResponse.failure("An error occurred in log in.", null, StatusCodes.INTERNAL_SERVER_ERROR);
     }
   }
 }

@@ -3,6 +3,7 @@ import { handleServiceResponse } from "@/common/utils/httpHandlers";
 import { UserModel } from "@/database/models/User";
 import type { Request, RequestHandler, Response } from "express";
 import type { User } from "../user/userModel";
+import { userService } from "../user/userService";
 
 class AuthController {
   constructor() {
@@ -19,6 +20,14 @@ class AuthController {
       modifiedAt: userFromDB!.modifiedAt,
     };
     return handleServiceResponse(ServiceResponse.success<User>("Fetched user", user), res);
+  };
+
+  public authenticateUser: RequestHandler = async (req: Request, res: Response) => {
+    const { username, password } = req.body;
+
+    const response = await userService.findUser(username, password);
+
+    return handleServiceResponse(response, res);
   };
 }
 

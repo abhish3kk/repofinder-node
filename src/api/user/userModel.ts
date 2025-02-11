@@ -27,7 +27,7 @@ export const GetUserSchema = z.object({
   params: z.object({ id: commonValidations.id }),
 });
 
-export const GetUserRequestSchema = z.object({
+export const CreateUserRequestSchema = z.object({
   firstname: commonValidations.firstname.openapi({ example: "John" }),
   lastname: commonValidations.lastname.openapi({ example: "Doe" }),
   username: commonValidations.username.openapi({ example: "john" }),
