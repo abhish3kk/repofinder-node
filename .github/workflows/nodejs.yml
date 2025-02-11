@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: stage
+    environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
 
     steps:
       - uses: actions/checkout@v2
@@ -18,15 +18,9 @@ jobs:
         with:
           node-version: '22'
 
-      # - name: Install Dependencies
-      #   run: npm install
-      
-      # - name: Build Project
-      #   run: npm run build
-
       - name: Copy .env File
         run: | 
-          echo "NODE_ENV=${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}" >> .env
+          echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> .env
           echo "PORT=${{ secrets.PORT }}" >> .env
           echo "HOST=${{ secrets.HOST }}" >> .env
           echo "CORS_ORIGIN=${{ secrets.CORS_ORIGIN }}" >> .env
@@ -35,6 +29,12 @@ jobs:
           echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
           echo "Running tests with secret: $SECRET_KEY"
           
+      # - name: Install Dependencies
+      #   run: npm install
+      
+      # - name: Build Project
+      #   run: npm run build
+      
       - name: Print environement variables
         run: printenv
       
