@@ -27,15 +27,15 @@ jobs:
           echo "COMMON_RATE_LIMIT_WINDOW_MS=${{ vars.COMMON_RATE_LIMIT_WINDOW_MS }}" >> .env
           echo "COMMON_RATE_LIMIT_MAX_REQUESTS=${{ vars.COMMON_RATE_LIMIT_MAX_REQUESTS }}" >> .env
           echo "SECRET_KEY=${{ vars.SECRET_KEY }}" >> .env
-          
-      # - name: Install Dependencies
-      #   run: npm install
-      
-      # - name: Build Project
-      #   run: npm run build
-      
+
       - name: View .env file (for debugging)
         run: cat .env | grep COMMON_RATE_LIMIT_MAX_REQUESTS
+          
+      - name: Install Dependencies
+        run: npm install
+      
+      - name: Build Project
+        run: npm run build
       
       # - name: Start Server
       #   run: npm run start
