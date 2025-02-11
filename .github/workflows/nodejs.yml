@@ -20,14 +20,13 @@ jobs:
 
       - name: Copy .env File
         run: | 
-          echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> .env
-          echo "PORT=${{ secrets.PORT }}" >> .env
-          echo "HOST=${{ secrets.HOST }}" >> .env
-          echo "CORS_ORIGIN=${{ secrets.CORS_ORIGIN }}" >> .env
-          echo "COMMON_RATE_LIMIT_WINDOW_MS=${{ secrets.COMMON_RATE_LIMIT_WINDOW_MS }}" >> .env
-          echo "COMMON_RATE_LIMIT_MAX_REQUESTS=${{ secrets.COMMON_RATE_LIMIT_MAX_REQUESTS }}" >> .env
-          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
-          echo "Running tests with secret: $SECRET_KEY"
+          echo "NODE_ENV=${{ vars.NODE_ENV }}" >> .env
+          echo "PORT=${{ vars.PORT }}" >> .env
+          echo "HOST=${{ vars.HOST }}" >> .env
+          echo "CORS_ORIGIN=${{ vars.CORS_ORIGIN }}" >> .env
+          echo "COMMON_RATE_LIMIT_WINDOW_MS=${{ vars.COMMON_RATE_LIMIT_WINDOW_MS }}" >> .env
+          echo "COMMON_RATE_LIMIT_MAX_REQUESTS=${{ vars.COMMON_RATE_LIMIT_MAX_REQUESTS }}" >> .env
+          echo "SECRET_KEY=${{ vars.SECRET_KEY }}" >> .env
           
       # - name: Install Dependencies
       #   run: npm install
@@ -36,7 +35,7 @@ jobs:
       #   run: npm run build
       
       - name: View .env file (for debugging)
-        run: cat .env
+        run: cat .env | grep COMMON_RATE_LIMIT_MAX_REQUESTS
       
       # - name: Start Server
       #   run: npm run start
