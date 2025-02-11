@@ -34,6 +34,8 @@ jobs:
           echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
           echo "Running tests with secret: $SECRET_KEY"
           echo ${{secrets}}
+      - name: Print environement variables
+        run: printenv
       
       # - name: Start Server
       #   run: npm run start
