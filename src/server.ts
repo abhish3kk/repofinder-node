@@ -19,6 +19,11 @@ const app: Express = express();
 // Set the application to trust the reverse proxy
 app.set("trust proxy", true);
 
+// app.use((req, res, next) => {
+//   const delay = 10000; // 2 seconds delay
+//   setTimeout(() => next(), delay);
+// });
+
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
