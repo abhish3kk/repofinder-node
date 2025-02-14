@@ -85,14 +85,8 @@ export class UserService {
 
   async findUser(username: string, password: string) {
     try {
-      const user = await UserModel.findOne({
-        where: { username },
-      });
+      const user = await this.userRepository.findUser(username, password);
       if (!user) {
-        return ServiceResponse.failure("Invalid username or password", null, StatusCodes.BAD_REQUEST);
-      }
-      const isMatch = await UserModel.verifyPassword(password, user.password);
-      if (!isMatch) {
         return ServiceResponse.failure("Invalid username or password", null, StatusCodes.UNAUTHORIZED);
       }
 

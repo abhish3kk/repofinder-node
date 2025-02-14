@@ -18,7 +18,7 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
   }
   jwt.verify(token, env.SECRET_KEY, (err, decoded) => {
     if (err) {
-      const serviceResponse = ServiceResponse.failure("Failed to authenticate token", StatusCodes.BAD_REQUEST);
+      const serviceResponse = ServiceResponse.failure("Failed to authenticate token", null, StatusCodes.UNAUTHORIZED);
       const response = handleServiceResponse(serviceResponse, res);
       return response;
     }
