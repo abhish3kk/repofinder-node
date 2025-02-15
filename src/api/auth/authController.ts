@@ -12,9 +12,7 @@ class AuthController {
 
   public authenticateUser: RequestHandler = async (req: Request, res: Response) => {
     const { username, password } = req.body;
-
     const response = await userService.findUser(username, password);
-
     return handleServiceResponse(response, res);
   };
 }
