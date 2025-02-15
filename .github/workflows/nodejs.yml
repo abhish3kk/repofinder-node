@@ -27,6 +27,7 @@ jobs:
           echo "COMMON_RATE_LIMIT_WINDOW_MS=${{ vars.COMMON_RATE_LIMIT_WINDOW_MS }}" >> .env
           echo "COMMON_RATE_LIMIT_MAX_REQUESTS=${{ vars.COMMON_RATE_LIMIT_MAX_REQUESTS }}" >> .env
           echo "SECRET_KEY=${{ vars.SECRET_KEY }}" >> .env
+          echo "SECRET_KEY=${{ vars.PAT_TOKEN_GITHUB }}" >> .env
 
       - name: View .env file (for debugging)
         run: cat .env | grep CORS_ORIGIN
