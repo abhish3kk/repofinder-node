@@ -10,18 +10,19 @@ export class RepoService {
     try {
       const searchParams = new URLSearchParams({
         q: params.q,
-        per_page: params.per_page?.toString() || "10",
-        page: params.page?.toString() || "1",
+        // per_page: params.per_page?.toString() || "10",
+        // page: params.page?.toString() || "1",
       });
 
-      if (params.sort) searchParams.append("sort", params.sort);
-      if (params.order) searchParams.append("order", params.order);
-      if (params.language) searchParams.append("language", params.language);
-      if (params.created) searchParams.append("created", params.created);
-      if (params.pushed) searchParams.append("pushed", params.pushed);
-      if (params.user) searchParams.append("user", params.user);
+      // if (params.sort) searchParams.append("sort", params.sort);
+      // if (params.order) searchParams.append("order", params.order);
+      // if (params.language) searchParams.append("language", params.language);
+      // if (params.created) searchParams.append("created", params.created);
+      // if (params.pushed) searchParams.append("pushed", params.pushed);
+      // if (params.user) searchParams.append("user", params.user);
 
       const url: string = decodeURIComponent(`${endpoints.GITHUB_SEARCH_REPOS}?${searchParams.toString()}`);
+      console.log("🚀 ~ RepoService ~ getRepos ~ url:", url);
       const response = await axios.get(url);
       return ServiceResponse.success<GitHubSearchResponse>("Response from github repo API", response.data);
     } catch (error: any) {
