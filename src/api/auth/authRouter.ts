@@ -14,9 +14,7 @@ authRegistry.register("Login Request Schema", LoginRequestUserSchema);
 authRegistry.registerPath({
   method: "get",
   path: "/auth",
-  request: {
-    headers: AuthHeaderSchema,
-  },
+  security: [{ Authorization: [] }],
   tags: ["Auth"],
   responses: createApiResponse(UserSchema, "success"),
 });

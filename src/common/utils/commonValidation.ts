@@ -12,4 +12,10 @@ export const commonValidations = {
   lastname: z.string().min(1),
   username: z.string().min(1),
   password: z.string().openapi({ format: "password" }).min(1),
+  topics: z.string(),
+  perPage: z.number(),
+  starGazers: z.string(),
+  sort: z.string(),
+  order: z.string(),
+  languages: z.string(),
 };

@@ -7,7 +7,6 @@ import { env } from "../utils/envConfig";
 import { handleServiceResponse } from "../utils/httpHandlers";
 
 export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
-  console.log("Request Headers:", JSON.stringify(req.headers, null, 2));
   const parsedHeaders = AuthHeaderSchema.parse(req.headers);
   const authHeader = parsedHeaders.authorization;
   const token = authHeader.split(" ")[1]; // Extract the token from the Bearer scheme

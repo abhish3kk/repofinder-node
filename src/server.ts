@@ -13,6 +13,7 @@ import { env } from "@/common/utils/envConfig";
 import "./custom.d.ts";
 import { authRouter } from "@/api/auth/authRouter";
 import { repoRouter } from "./api/repos/repoRouter.js";
+import { settingRouter } from "./api/settings/settingRouter.js";
 
 const logger = pino({ name: "server start" });
 const app: Express = express();
@@ -40,6 +41,7 @@ app.use("/health-check", healthCheckRouter);
 app.use("/users", userRouter);
 app.use("/auth", authRouter);
 app.use("/repos", repoRouter);
+app.use("/settings", settingRouter);
 
 // Swagger UI
 app.use(openAPIRouter);

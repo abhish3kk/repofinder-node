@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import { DataTypes, Model } from "sequelize";
 import database from "..";
+import { GitHubOrder, GitHubSort, GitHubStars, Settings } from "./Settings";
 class UserModel extends Model {
   declare id: number;
   declare firstname: string;
@@ -52,6 +53,17 @@ UserModel.init(
     hooks: {
       beforeCreate: async (user: UserModel) => {
         user.password = await UserModel.hashPassword(user.password);
+      },
+      afterCreate: async (user: UserModel) => {
+        await Settings.create({
+          userId: user.id,
+          topics: "",
+          perPage: 5,
+          languages: "",
+          starGazers: GitHubStars.Between50And100,
+          sort: GitHubSort.Updated,
+          order: GitHubOrder.Descending,
+        });
       },
     },
   },
