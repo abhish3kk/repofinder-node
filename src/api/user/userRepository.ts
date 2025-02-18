@@ -1,4 +1,5 @@
 import type { User, UserRequest } from "@/api/user/userModel";
+import { Settings } from "@/database/models/Settings";
 import { UserModel } from "@/database/models/User";
 
 export class UserRepository {
@@ -11,9 +12,16 @@ export class UserRepository {
   }
 
   async findByIdAsync(id: number): Promise<User | null> {
-    return UserModel.findByPk(id, {
+    return await UserModel.findByPk(id, {
       attributes: {
-        exclude: ["id", "password", "password", "createdAt", "updatedAt"],
+        exclude: ["id", "password", "createdAt", "updatedAt"],
+      },
+      include: {
+        model: Settings,
+        as: "settings",
+        attributes: {
+          exclude: ["id", "userId", "createdAt", "updatedAt"],
+        },
       },
     });
   }
