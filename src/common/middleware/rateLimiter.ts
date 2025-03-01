@@ -10,6 +10,7 @@ const rateLimiter = rateLimit({
   standardHeaders: true,
   windowMs: 15 * 60 * env.COMMON_RATE_LIMIT_WINDOW_MS,
   keyGenerator: (req: Request) => req.ip as string,
+  skip: (req) => req.path === "/health-check",
 });
 
 export default rateLimiter;
